@@ -1,46 +1,102 @@
-# Auth App - Login & Registration (React + Spring Boot + MySQL)
+# Auth App
 
-A full-stack authentication app with registration, login, password reset and a protected dashboard using JWT tokens.
+A full-stack login and registration app with JWT authentication.
+
+**Tech stack:** React (Vite) · Spring Boot 3 · MySQL · JWT
 
 ## Features
+
 - User registration and login
+- JWT-based authentication
 - Password reset
-- JWT token-based authentication (protected `/api/me` endpoint)
-- Dashboard page shown only after login
-- Spring Security configuration with a JWT filter
+- Protected dashboard (shown only after login)
 
-## Tech Stack
-| Layer | Technology |
-|-------|------------|
-| Frontend | React (Vite) |
-| Backend | Java, Spring Boot, Spring Security, Spring Data JPA |
-| Database | MySQL |
-| Auth | JWT |
+## Project Structure
 
-## API Endpoints
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| POST | `/api/auth/register` | Public | Create account |
-| POST | `/api/auth/login` | Public | Login, returns token |
-| POST | `/api/auth/reset-password` | Public | Reset password |
-| GET | `/api/me` | Logged in | Current user details |
-
-## Run Locally
-**Backend** (runs on `http://localhost:8081`)
-1. Install MySQL. The database `authdb` is created automatically.
-2. Create `backend/src/main/resources/application-local.properties` (git-ignored) with:
 ```
-spring.datasource.password=YOUR_MYSQL_PASSWORD
-app.jwt.secret=A_LONG_RANDOM_SECRET_AT_LEAST_32_CHARACTERS
+auth-app/
+├── backend/    # Spring Boot API (port 8081)
+├── frontend/   # React + Vite app
+└── schema.sql  # MySQL schema
 ```
-3. Run `AuthApplication` from your IDE, or use `mvn spring-boot:run` inside `backend`.
 
-**Frontend**
+## Prerequisites
+
+- Java 17+
+- Maven
+- Node.js 18+
+- MySQL 8+
+
+## Setup
+
+### 1. Database
+
+Make sure MySQL is running. The database `authdb` is created automatically on first run. You can also create the tables manually with `schema.sql`.
+
+### 2. Backend
+
+```bash
+cd backend
+cp src/main/resources/application.properties.example src/main/resources/application.properties
+```
+
+Open `application.properties` and set your values:
+
+```
+spring.datasource.password=your_db_password
+app.jwt.secret=your_long_random_secret
+```
+
+Or use environment variables instead:
+
+```bash
+# Windows (cmd)
+set DB_PASSWORD=your_db_password
+set JWT_SECRET=your_long_random_secret
+
+# Mac / Linux
+export DB_PASSWORD=your_db_password
+export JWT_SECRET=your_long_random_secret
+```
+
+Run the backend:
+
+```bash
+mvn spring-boot:run
+```
+
+Backend runs at `http://localhost:8081`.
+
+### 3. Frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
+Frontend runs at `http://localhost:5173`.
+
+## API Endpoints
+
+| Method | Endpoint                   | Description              | Auth |
+|--------|----------------------------|--------------------------|------|
+| POST   | `/api/auth/register`       | Create a new account     | No   |
+| POST   | `/api/auth/login`          | Login, returns a JWT     | No   |
+| POST   | `/api/auth/reset-password` | Reset password           | No   |
+| GET    | `/api/me`                  | Get current user details | Yes  |
+
+Protected endpoints need this header:
+
+```
+Authorization: Bearer <token>
+```
+
+## Security Notes
+
+- `application.properties` is git-ignored. Never commit real passwords or secrets.
+- Use a long, random value for `app.jwt.secret` in any real deployment.
+
 ## Author
-**Sowbarnika M** - Java Full Stack Developer (fresher)
+
+[MSowbarnika](https://github.com/MSowbarnika)
