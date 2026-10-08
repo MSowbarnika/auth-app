@@ -1,0 +1,11 @@
+node_modules/
+target/
+dist/
+.env
+application-local.properties
+.idea/
+.settings/
+.classpath
+.project
+backend/src/main/resources/application.properties
+backend/src/main/resources/application-local.properties
